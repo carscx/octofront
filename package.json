@@ -21,9 +21,15 @@
   "dependencies": {
     "@mantine/core": "7.12.0",
     "@mantine/hooks": "7.12.0",
+    "@tabler/icons-react": "^3.11.0",
+    "axios": "^1.7.3",
+    "http-proxy-middleware": "^3.0.0",
+    "octoprint": "^0.0.4",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.1.10",
@@ -39,6 +45,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/request": "^2",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",
@@ -62,7 +69,7 @@
     "stylelint": "^16.6.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "typescript": "^5.5.2",
-    "vite": "^5.3.1",
+    "vite": "^5.3.5",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
   },
