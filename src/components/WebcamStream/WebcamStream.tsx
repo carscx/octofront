@@ -1,15 +1,15 @@
-// src/components/WebcamStream.tsx
-import React from 'react';
+import { type FC } from 'react'
+import config from '@/config'
 
-const WebcamStream: React.FC = () => {
-  const webcamUrl = 'http://192.168.1.19/webcam/?action=stream'; // Reemplaza con la URL de tu webcam
+const WebcamStream: FC = () => {
+  const { webcamUrl } = config.api
 
   return (
-    <div>
+    <>
       <h1>Webcam Stream</h1>
       <img src={webcamUrl} alt="Webcam Stream" style={{ width: '100%' }} />
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default WebcamStream;
+export default WebcamStream

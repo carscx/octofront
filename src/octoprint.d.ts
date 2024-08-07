@@ -1,2 +1,2 @@
 // src/octoprint.d.ts
-declare module 'octoprint';
+declare module 'octoprint'

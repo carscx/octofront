@@ -1,11 +1,11 @@
-import { AppShell, Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import PrinterStatus from '@/components/PrinterStatus/PrinterStatus';
-import WebcamStream from '@/components/WebcamStream/WebcamStream';
-import TemperatureControl from '@/components/TemperatureControl/TemperatureControl';
+import { AppShell, Burger, Container } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import PrinterStatus from '@/components/PrinterStatus/PrinterStatus'
+import WebcamStream from '@/components/WebcamStream/WebcamStream'
+import TemperatureControl from '@/components/TemperatureControl/TemperatureControl'
 
 export function HomePage() {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle }] = useDisclosure()
 
   return (
     <AppShell
@@ -25,10 +25,12 @@ export function HomePage() {
       <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
 
       <AppShell.Main>
-        <PrinterStatus />
-        <WebcamStream />
-        <TemperatureControl />
+        <Container size="lg">
+          <PrinterStatus />
+          <WebcamStream />
+          <TemperatureControl />
+        </Container>
       </AppShell.Main>
     </AppShell>
-  );
+  )
 }
