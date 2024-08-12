@@ -1,127 +1,69 @@
-/* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { IconTemperature } from '@tabler/icons-react';
-import { Badge, Box, Progress } from '@mantine/core';
-import { getPrinterState, getJobState } from '@/api/octoprint';
-import TemperatureChart from '@/components/TemperatureChart/TemperatureChart'; // Importa el nuevo componente
-import styles from './PrinterStatus.module.scss';
+import { type FC } from 'react'
+import { Box, Space, useMantineTheme } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
+import { useApi } from '@/context/ApiContext'
+import TemperatureChart from '@/components/TemperatureChart/TemperatureChart'
+import JobStatus from './JobStatus'
+import ProgressDisplay from './ProgressDisplay'
+import TemperatureGrid from './TemperatureGrid'
+import { useMediaQuery } from '@mantine/hooks'
 
-const PrinterStatus: React.FC = () => {
-  const [printerState, setPrinterState] = useState<any>(null);
-  const [jobState, setJobState] = useState<any>(null);
-  const { t } = useTranslation();
+const PrinterStatus: FC = () => {
+  const { printerState, jobState } = useApi()
+  const { t } = useTranslation('features', { keyPrefix: 'PrinterStatus' })
 
-  useEffect(() => {
-    const fetchPrinterState = async () => {
-      try {
-        const state = await getPrinterState();
-        setPrinterState(state);
-      } catch (error) {
-        console.error('PrinterStatus.tsx : Error al obtener el estado de la impresora:', error);
-      }
-    };
+  const theme = useMantineTheme()
 
-    const fetchJobState = async () => {
-      try {
-        const stateJob = await getJobState();
-        setJobState(stateJob);
-      } catch (error) {
-        console.error('PrinterStatus.tsx : Error al obtener el estado del trabajo:', error);
-      }
-    };
-
-    fetchPrinterState();
-    fetchJobState();
-
-    const intervalId = setInterval(fetchPrinterState, 5000); // Intervalo de 5 segundos
-    const intervalJobId = setInterval(fetchJobState, 5000); // Intervalo de 5 segundos
-
-    return () => {
-      clearInterval(intervalId);
-      clearInterval(intervalJobId);
-    };
-  }, []);
+  const isSmallScreen = useMediaQuery('(max-width: 768px)')
 
   if (!printerState || !jobState) {
-    return <div>Cargando...</div>;
+    return <div>{t('loading')}</div>
   }
 
-  const icon = <IconTemperature style={{ width: 'rem(12)', height: 'rem(12)' }} />;
-
-  const printTime = jobState?.progress?.printTime ?? 0;
-  const printTimeLeft = jobState?.progress?.printTimeLeft ?? 0;
-  const completionPercentage =
-    printTime + printTimeLeft > 0 ? (printTime / (printTime + printTimeLeft)) * 100 : 0;
-
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600)
-      .toString()
-      .padStart(2, '0');
-    const m = Math.floor((seconds % 3600) / 60)
-      .toString()
-      .padStart(2, '0');
-    const s = Math.floor(seconds % 60)
-      .toString()
-      .padStart(2, '0');
-    return `${h}:${m}:${s}`;
-  };
-
-  const formatSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
-  };
-
-  const estimatedCompletionTime = new Date(Date.now() + printTimeLeft * 1000);
-
-  const formatDate = (date: Date) => {
-    const h = date.getHours().toString().padStart(2, '0');
-    const m = date.getMinutes().toString().padStart(2, '0');
-    const s = date.getSeconds().toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
-  };
+  const temperatures = [
+    {
+      title: t('bedTemperature'),
+      temperature: printerState?.temperature?.bed?.actual,
+      minTemp: 20,
+      maxTemp: 60,
+    },
+    {
+      title: t('hotendTemperature'),
+      temperature: printerState?.temperature?.tool0?.actual,
+      minTemp: 22,
+      maxTemp: 200,
+    },
+  ]
 
   return (
     <div>
-      <h1>{t('statePrinter')}</h1>
-      <div>
-        Temperatura de la cama:{' '}
-        <Badge size="xl" leftSection={icon}>
-          {printerState?.temperature?.bed?.actual}
-        </Badge>
-      </div>
-      <div>
-        Temperatura del hotend:{' '}
-        <Badge size="xl" leftSection={icon}>
-          {printerState?.temperature?.tool0?.actual}
-        </Badge>
-      </div>
-      <div>{jobState?.state === 'Operational' ? 'Todo listo para imprimir' : 'Imprimiendo'}</div>
-      <div>Tiempo de impresión: {formatTime(printTime)}</div>
-      <div>Tiempo restante de impresión: {formatTime(printTimeLeft)}</div>
-      <div>Hora estimada de finalización: {formatDate(estimatedCompletionTime)}</div>
-      <div>
-        Impreso: {formatSize(jobState?.progress?.filepos ?? 0)} /{' '}
-        {formatSize(jobState?.job?.file?.size ?? 0)}
-      </div>
-      <div>
-        Progreso de impresión:
-        <Box className={styles.progressBox} my="xs">
-          <Progress.Root transitionDuration={200} className={styles.root} size="xl">
-            <Progress.Section value={completionPercentage} className={styles.section}>
-              <Progress.Label className={styles.label}>
-                {`${completionPercentage.toFixed(2)}%`}{' '}
-              </Progress.Label>
-            </Progress.Section>
-          </Progress.Root>
-        </Box>
-      </div>
+      <Box mt="xl">
+        <h1
+          style={{
+            display: 'flex',
+            flexDirection: isSmallScreen ? 'column' : 'row',
+            alignItems: 'center',
+            gap: isSmallScreen ? '10px' : '20px',
+            textAlign: isSmallScreen ? 'center' : 'left',
+          }}
+        >
+          {t('printerStatus')}
+          <JobStatus jobState={jobState} />
+        </h1>
+      </Box>
+      <TemperatureGrid temperatures={temperatures} />
+      <Space h="xl" />
+      <ProgressDisplay
+        printTime={jobState?.progress?.printTime ?? 0}
+        printTimeLeft={jobState?.progress?.printTimeLeft ?? 0}
+        filePos={jobState?.progress?.filepos ?? 0}
+        fileSize={jobState?.job?.file?.size ?? 0}
+        isPrinting={jobState?.state === 'Printing'}
+      />
+      <Space h="xl" />
       <TemperatureChart printerState={printerState} />
     </div>
-  );
-};
+  )
+}
 
-export default PrinterStatus;
+export default PrinterStatus

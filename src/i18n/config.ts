@@ -1,26 +1,43 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import HttpBackend from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import enJSON from '../locales/en.json'
+import esJSON from '../locales/es.json'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
-i18n
-  .use(HttpBackend) // load translations using http (default public/assets/locales)
-  .use(LanguageDetector) // detect user language
-  .use(initReactI18next) // pass the i18n instance to react-i18next
-  // @ts-expect-error
+import esPrinterStatusJSON from '@/components/PrinterStatus/es.json'
+import enPrinterStatusJSON from '@/components/PrinterStatus/en.json'
+
+// Features
+
+void i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
+    resources: {
+      en: enJSON,
+      es: esJSON,
+    },
+    lng: 'es',
     fallbackLng: 'es',
-    debug: true,
+    defaultNS: 'common',
+    fallbackNS: 'common',
     interpolation: {
-      escapeValue: false, // react already safes from xss
+      escapeValue: false,
     },
-    backend: {
-      loadPath: '@/locales/{{lng}}/{{ns}}.json',
-    },
-    detection: {
-      order: ['queryString', 'cookie'],
-      cache: ['cookie'],
-    },
-  });
+  })
 
-export default i18n;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+i18n.services.formatter.add('lowercase', (value: string) => {
+  return value.toLowerCase()
+})
+
+i18n.addResourceBundle('en', 'features', {
+  PrinterStatus: enPrinterStatusJSON,
+})
+
+i18n.addResourceBundle('es', 'features', {
+  PrinterStatus: esPrinterStatusJSON,
+})
+
+export default i18n

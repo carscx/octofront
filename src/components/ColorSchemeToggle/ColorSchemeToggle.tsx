@@ -1,13 +1,26 @@
-import { Button, Group, useMantineColorScheme } from '@mantine/core'
+import { useState } from 'react'
+import { SegmentedControl, useMantineColorScheme } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
 
 export function ColorSchemeToggle() {
   const { setColorScheme } = useMantineColorScheme()
+  const [value, setValue] = useState('dark')
+  const { t } = useTranslation('common')
+
+  const handleChangeTheme = (value: string | any) => {
+    setValue(value)
+    setColorScheme(value)
+  }
 
   return (
-    <Group justify="center" mt="xl">
-      <Button onClick={() => setColorScheme('light')}>Light</Button>
-      <Button onClick={() => setColorScheme('dark')}>Dark</Button>
-      <Button onClick={() => setColorScheme('auto')}>Auto</Button>
-    </Group>
+    <SegmentedControl
+      value={value}
+      onChange={handleChangeTheme}
+      data={[
+        { label: t('light'), value: 'light' },
+        { label: t('dark'), value: 'dark' },
+        { label: t('auto'), value: 'auto' },
+      ]}
+    />
   )
 }

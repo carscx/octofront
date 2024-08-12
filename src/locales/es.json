@@ -1,3 +1,8 @@
 {
-  "statePrinter": "Estado de la Impresora"
+  "common": {
+    "statePrinter": "Impresora de Estado",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "auto": "Auto"
+  }
 }

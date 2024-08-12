@@ -1,0 +1,8 @@
+{
+  "common": {
+    "statePrinter": "State Printer",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto"
+  }
+}

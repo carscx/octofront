@@ -2,5 +2,5 @@ import { createTheme } from '@mantine/core'
 
 export const theme = createTheme({
   /** Put your mantine theme override here */
-  fontFamily: 'Open Sans, sans-serif',
+  fontFamily: 'Josefin Sans, sans-serif',
 })
