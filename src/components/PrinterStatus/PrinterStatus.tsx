@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { Box, Space, useMantineTheme } from '@mantine/core'
+import { Box, Space, Text, useMantineTheme } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { useApi } from '@/context/ApiContext'
 import TemperatureChart from '@/components/TemperatureChart/TemperatureChart'
@@ -58,6 +58,7 @@ const PrinterStatus: FC = () => {
         printTimeLeft={jobState?.progress?.printTimeLeft ?? 0}
         filePos={jobState?.progress?.filepos ?? 0}
         fileSize={jobState?.job?.file?.size ?? 0}
+        fileName={jobState?.job?.file?.name ?? ''}
         isPrinting={jobState?.state === 'Printing'}
       />
       <Space h="xl" />

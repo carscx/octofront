@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next'
 import styles from './PrinterStatus.module.scss'
 import { formatTime, formatSize, formatDate } from '@/utils/helpers'
 import InfoCard from './InfoCard'
+import { IconFileAnalytics } from '@tabler/icons-react'
 
 interface ProgressDisplayProps {
   printTime: number
   printTimeLeft: number
   filePos: number
   fileSize: number
+  fileName: number
   isPrinting: boolean // Nueva propiedad para determinar si la impresora está imprimiendo
 }
 
@@ -18,6 +20,7 @@ const ProgressDisplay: FC<ProgressDisplayProps> = ({
   printTimeLeft,
   filePos,
   fileSize,
+  fileName,
   isPrinting,
 }) => {
   const { t } = useTranslation('features', { keyPrefix: 'PrinterStatus' })
@@ -47,10 +50,13 @@ const ProgressDisplay: FC<ProgressDisplayProps> = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6, lg: 3 }}>
           <InfoCard
-            label={t('printed')}
+            label={t('file')}
+            icon={<IconFileAnalytics />}
             value={`${formatSize(filePos)} / ${formatSize(fileSize)}`}
             isPrinting={isPrinting}
-          />
+          >
+            <Text>{fileName}</Text>
+          </InfoCard>
         </Grid.Col>
       </Grid>
 
