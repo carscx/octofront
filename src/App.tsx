@@ -3,22 +3,18 @@ import { I18nextProvider } from 'react-i18next'
 import { MantineProvider } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { NavigationProgress } from '@mantine/nprogress'
-import { enUS as en, es } from 'date-fns/locale'
-import { Router } from './Router'
-import { theme } from './theme'
+import { Notifications } from '@mantine/notifications'
 import { AuthProvider } from '@/context/AuthContext'
 import '@/i18n/config'
 import '@mantine/core/styles.css'
 import '@mantine/charts/styles.css'
 import '@mantine/nprogress/styles.css'
-
-const LOCALE_MAP = { es, en }
+import '@mantine/notifications/styles.css'
+import { Router } from './Router'
+import { theme } from './theme'
 
 export default function App() {
   const { i18n } = useTranslation()
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const adapterLocale = LOCALE_MAP[i18n.language]
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('i18nextLng')
@@ -31,6 +27,7 @@ export default function App() {
     <MantineProvider theme={theme} defaultColorScheme="light">
       <I18nextProvider i18n={i18n} defaultNS={'translation'}>
         <NavigationProgress />
+        <Notifications />
         <AuthProvider>
           <Router />
         </AuthProvider>

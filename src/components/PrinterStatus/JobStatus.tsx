@@ -1,57 +1,53 @@
-import React from 'react';
-import { Chip } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
+import { type FC } from 'react'
+import { Chip } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
 
 interface JobStatusProps {
-  jobState: {
-    state: string;
-  };
+  state?: string
 }
 
-const JobStatus: React.FC<JobStatusProps> = ({ jobState }) => {
-  const { t } = useTranslation('features', { keyPrefix: 'PrinterStatus' });
+const JobStatus: FC<JobStatusProps> = ({ state }) => {
+  const { t } = useTranslation('printerStatus')
 
   const getStatusColor = (state: string) => {
     switch (state) {
       case 'Operational':
-        return 'dark';
+        return 'dark'
       case 'Printing':
-        return 'teal';
+        return 'teal'
       case 'Paused':
-        return 'yellow';
+        return 'yellow'
       case 'Error':
-        return 'red';
+        return 'red'
       case 'Offline':
-        return 'gray';
+        return 'gray'
       default:
-        return 'blue';
+        return 'blue'
     }
-  };
+  }
 
   const getStatusText = (state: string) => {
     switch (state) {
       case 'Operational':
-        return t('readyToPrint');
+        return t('readyToPrint')
       case 'Printing':
-        return t('printing');
+        return t('printing')
       case 'Paused':
-        return t('paused');
+        return t('paused')
       case 'Error':
-        return t('error');
+        return t('error')
       case 'Offline':
-        return t('offline');
+        return t('offline')
       default:
-        return t('unknown');
+        return t('unknown')
     }
-  };
-
-  const state = jobState?.state || 'Unknown';
+  }
 
   return (
-    <Chip checked color={getStatusColor(state)}>
-      {getStatusText(state)}
+    <Chip checked color={getStatusColor(state ?? '')}>
+      {getStatusText(state ?? '')}
     </Chip>
-  );
-};
+  )
+}
 
-export default JobStatus;
+export default JobStatus

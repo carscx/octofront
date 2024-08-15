@@ -1,13 +1,5 @@
-import { type FC } from 'react'
-import {
-  Grid,
-  Alert,
-  Space,
-  Center,
-  Chip,
-  useMantineColorScheme,
-  useMantineTheme,
-} from '@mantine/core'
+import { type FC, useState, useEffect } from 'react'
+import { Grid, Alert, Space, Center, Chip } from '@mantine/core'
 import { IconTemperature } from '@tabler/icons-react'
 
 interface TemperatureGridProps {
@@ -20,8 +12,20 @@ interface TemperatureGridProps {
 }
 
 const TemperatureGrid: FC<TemperatureGridProps> = ({ temperatures }) => {
-  const theme = useMantineTheme()
-  const { colorScheme } = useMantineColorScheme()
+  const [previousTemperatures, setPreviousTemperatures] = useState<Array<number | undefined>>(
+    temperatures.map((t) => t.temperature)
+  )
+
+  useEffect(() => {
+    const updatedTemperatures = temperatures.map((t, index) => {
+      if (t.temperature === 0 && previousTemperatures[index] !== undefined) {
+        return previousTemperatures[index] // Mantener la temperatura anterior si la actual es 0
+      }
+      return t.temperature
+    })
+
+    setPreviousTemperatures(updatedTemperatures)
+  }, [temperatures])
 
   const getChipColor = (temperature: number | undefined, minTemp: number, maxTemp: number) => {
     if (temperature === undefined) return 'gray'
@@ -36,8 +40,9 @@ const TemperatureGrid: FC<TemperatureGridProps> = ({ temperatures }) => {
 
   return (
     <Grid gutter="md">
-      {temperatures.map(({ title, temperature, minTemp, maxTemp }) => {
-        const chipColor = getChipColor(temperature, minTemp, maxTemp)
+      {temperatures.map(({ title, temperature, minTemp, maxTemp }, index) => {
+        const effectiveTemperature = previousTemperatures[index]
+        const chipColor = getChipColor(effectiveTemperature, minTemp, maxTemp)
 
         return (
           <Grid.Col key={title} span={{ base: 12, sm: 6, lg: 6 }}>
@@ -56,7 +61,7 @@ const TemperatureGrid: FC<TemperatureGridProps> = ({ temperatures }) => {
                   icon={<IconTemperature style={{ width: '1rem', height: '1rem' }} />}
                   checked
                 >
-                  {temperature}°C
+                  {effectiveTemperature}°C
                 </Chip>
               </Center>
             </Alert>

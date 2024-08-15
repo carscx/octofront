@@ -1,29 +1,21 @@
 import { type FC } from 'react'
 import { Box, Grid, Progress, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
-import styles from './PrinterStatus.module.scss'
-import { formatTime, formatSize, formatDate } from '@/utils/helpers'
-import InfoCard from './InfoCard'
 import { IconFileAnalytics } from '@tabler/icons-react'
+import { formatTime, formatSize, formatDate } from '@/utils/helpers'
+import { usePrinterWebSocket } from '@/hooks/usePrinterWebSocket'
+import InfoCard from '@/components/PrinterStatus/InfoCard'
+import styles from '@/components/PrinterStatus/PrinterStatus.module.scss'
 
-interface ProgressDisplayProps {
-  printTime: number
-  printTimeLeft: number
-  filePos: number
-  fileSize: number
-  fileName: number
-  isPrinting: boolean // Nueva propiedad para determinar si la impresora está imprimiendo
-}
-
-const ProgressDisplay: FC<ProgressDisplayProps> = ({
-  printTime,
-  printTimeLeft,
-  filePos,
-  fileSize,
-  fileName,
-  isPrinting,
-}) => {
-  const { t } = useTranslation('features', { keyPrefix: 'PrinterStatus' })
+const ProgressDisplay: FC = () => {
+  const { t } = useTranslation('printerStatus')
+  const { progressState, fileState, isPrinting } = usePrinterWebSocket()
+  const printTime = progressState?.printTime ?? 0
+  const printTimeLeft = progressState?.printTimeLeft ?? 0
+  const filePos = progressState?.filepos ?? 0
+  const fileSize = fileState?.size ?? 0
+  const fileName = fileState?.name ?? ''
+  const isPrintingState = isPrinting ?? false
   const completionPercentage =
     printTime + printTimeLeft > 0 ? (printTime / (printTime + printTimeLeft)) * 100 : 0
   const estimatedCompletionTime = new Date(Date.now() + printTimeLeft * 1000)
@@ -32,20 +24,24 @@ const ProgressDisplay: FC<ProgressDisplayProps> = ({
     <>
       <Grid gutter="md">
         <Grid.Col span={{ base: 12, md: 6, lg: 3 }}>
-          <InfoCard label={t('printTime')} value={formatTime(printTime)} isPrinting={isPrinting} />
+          <InfoCard
+            label={t('printTime')}
+            value={formatTime(printTime)}
+            isPrinting={isPrintingState}
+          />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6, lg: 3 }}>
           <InfoCard
             label={t('printTimeLeft')}
             value={formatTime(printTimeLeft)}
-            isPrinting={isPrinting}
+            isPrinting={isPrintingState}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6, lg: 3 }}>
           <InfoCard
             label={t('estimatedCompletionTime')}
             value={formatDate(estimatedCompletionTime)}
-            isPrinting={isPrinting}
+            isPrinting={isPrintingState}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6, lg: 3 }}>
@@ -53,7 +49,7 @@ const ProgressDisplay: FC<ProgressDisplayProps> = ({
             label={t('file')}
             icon={<IconFileAnalytics />}
             value={`${formatSize(filePos)} / ${formatSize(fileSize)}`}
-            isPrinting={isPrinting}
+            isPrinting={isPrintingState}
           >
             <Text>{fileName}</Text>
           </InfoCard>

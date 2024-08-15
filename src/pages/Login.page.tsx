@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
     event.preventDefault()
     try {
       const response = await login(username, password)
-      authenticate(response.session)
+      authenticate(response.session, username)
       navigate('/')
     } catch (err) {
       // Manejo del error si es necesario

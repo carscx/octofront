@@ -1,6 +1,6 @@
-// src/components/TemperatureChart.tsx
-import React, { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
+import { useTranslation } from 'react-i18next'
 
 interface TemperatureData {
   time: string
@@ -8,39 +8,55 @@ interface TemperatureData {
   hotendTemp: number
 }
 
-const TemperatureChart: React.FC<{ printerState: any }> = ({ printerState }) => {
+const TemperatureChart: FC<{ temperatures: any }> = ({ temperatures }) => {
+  const { t } = useTranslation('printerStatus')
   const [data, setData] = useState<TemperatureData[]>([])
+  const [lastValidBedTemp, setLastValidBedTemp] = useState<number | null>(null)
+  const [lastValidHotendTemp, setLastValidHotendTemp] = useState<number | null>(null)
 
   useEffect(() => {
-    if (printerState) {
+    if (temperatures) {
+      const currentBedTemp = temperatures[0].temperature
+      const currentHotendTemp = temperatures[1].temperature
+
+      const newBedTemp = currentBedTemp !== 0 ? currentBedTemp : lastValidBedTemp
+      const newHotendTemp = currentHotendTemp !== 0 ? currentHotendTemp : lastValidHotendTemp
+
+      if (currentBedTemp !== 0) setLastValidBedTemp(currentBedTemp)
+      if (currentHotendTemp !== 0) setLastValidHotendTemp(currentHotendTemp)
+
       const newDataPoint: TemperatureData = {
         time: new Date().toLocaleTimeString(),
-        bedTemp: printerState.temperature.bed.actual,
-        hotendTemp: printerState.temperature.tool0.actual,
+        bedTemp: newBedTemp ?? 0,
+        hotendTemp: newHotendTemp ?? 0,
       }
-      setData((prevData) => [...prevData, newDataPoint].slice(-50)) // Limitar a los últimos 50 puntos de datos
+
+      setData((prevData) => [...prevData, newDataPoint].slice(-50))
     }
-  }, [printerState])
+  }, [temperatures])
 
   const option = {
-    backgroundColor: '#333', // Fondo oscuro
+    backgroundColor: '#333',
     title: {
-      text: 'Temperatura de la Impresora',
+      text: t('chart.title'),
       textStyle: {
-        color: '#fff', // Color del texto del título
+        color: '#fff',
       },
+      top: 10,
+      left: 10,
     },
     tooltip: {
       trigger: 'axis',
       textStyle: {
-        color: '#fff', // Color del texto del tooltip
+        color: '#fff',
       },
-      backgroundColor: 'rgba(50, 50, 50, 0.7)', // Fondo del tooltip
+      backgroundColor: 'rgba(50, 50, 50, 0.7)',
     },
     legend: {
-      data: ['Bed Temperature', 'Hotend Temperature'],
+      data: [t('chart.bed'), t('chart.hotend')],
+      top: 10,
       textStyle: {
-        color: '#fff', // Color del texto de la leyenda
+        color: '#fff',
       },
     },
     xAxis: {
@@ -49,40 +65,40 @@ const TemperatureChart: React.FC<{ printerState: any }> = ({ printerState }) => 
       data: data.map((point) => point.time),
       axisLine: {
         lineStyle: {
-          color: '#888', // Color de la línea del eje X
+          color: '#888',
         },
       },
       axisTick: {
-        show: false, // Ocultar las marcas de las unidades del eje X
+        show: false,
       },
       axisLabel: {
-        color: '#fff', // Color de las etiquetas del eje X
+        color: '#fff',
       },
       splitLine: {
-        show: false, // Ocultar las líneas de la cuadrícula vertical
+        show: false,
       },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         formatter: '{value} °C',
-        color: '#fff', // Color de las etiquetas del eje Y
+        color: '#fff',
       },
       axisLine: {
         lineStyle: {
-          color: '#888', // Color de la línea del eje Y
+          color: '#888',
         },
       },
       axisTick: {
-        show: false, // Ocultar las marcas de las unidades del eje Y
+        show: false,
       },
       splitLine: {
-        show: false, // Ocultar las líneas de la cuadrícula horizontal
+        show: false,
       },
     },
     series: [
       {
-        name: 'Bed Temperature',
+        name: t('chart.bed'),
         type: 'line',
         data: data.map((point) => point.bedTemp),
         smooth: true,
@@ -92,7 +108,7 @@ const TemperatureChart: React.FC<{ printerState: any }> = ({ printerState }) => 
         },
       },
       {
-        name: 'Hotend Temperature',
+        name: t('chart.hotend'),
         type: 'line',
         data: data.map((point) => point.hotendTemp),
         smooth: true,

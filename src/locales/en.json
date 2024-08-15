@@ -3,6 +3,48 @@
     "statePrinter": "State Printer",
     "light": "Light",
     "dark": "Dark",
-    "auto": "Auto"
+    "auto": "Auto",
+    "toolExtruder": "Tool Extruder",
+    "extrude": "Extrude",
+    "retract": "Retract"
+  },
+  "printerStatus": {
+    "loading": "Loading...",
+    "title": "Printer status",
+    "statePrinter": "Printer state",
+    "bedTemperature": "Bed temperature",
+    "hotendTemperature": "Hotend temperature",
+    "readyToPrint": "Ready to print",
+    "printing": "Printing",
+    "paused": "Paused",
+    "error": "Error",
+    "offline": "Offline",
+    "unknown": "Unknown",
+    "printTime": "Print time",
+    "printTimeLeft": "Print time left",
+    "estimatedCompletionTime": "Estimated completion time",
+    "printed": "Printed",
+    "file": "File",
+    "printProgress": "Print progress",
+    "zeroBytes": "0 Bytes",
+    "bytes": "Bytes",
+    "kb": "KB",
+    "mb": "MB",
+    "gb": "GB",
+    "tb": "TB",
+    "errorOcurred": "An error occurred",
+    "retry": "Retry",
+    "chart": {
+      "title": "Temperature chart",
+      "bed": "Bed",
+      "hotend": "Hotend"
+    }
+  },
+  "tool": {
+    "title": "Extruder",
+    "temperatureIsInRange": "Temperature is in range",
+    "temperatureIsOutOfRange": "Temperature is out of range",
+    "extrusionPresetValues": "Extrusion preset values",
+    "retractionPresetValues": "Retraction preset values"
   }
 }

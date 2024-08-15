@@ -1,35 +1,92 @@
-import { type FC } from 'react'
-import { Box, Space, Text, useMantineTheme } from '@mantine/core'
-import { useTranslation } from 'react-i18next'
-import { useApi } from '@/context/ApiContext'
-import TemperatureChart from '@/components/TemperatureChart/TemperatureChart'
-import JobStatus from './JobStatus'
-import ProgressDisplay from './ProgressDisplay'
-import TemperatureGrid from './TemperatureGrid'
+import { useEffect, type FC } from 'react'
+import { Alert, Box, Button, Space } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { useTranslation } from 'react-i18next'
+// import { usePrinterContext } from '@/context/PrinterContext'
+// import TemperatureChart from '@/components/TemperatureChart/TemperatureChart'
+import JobStatus from './JobStatus'
+// import ProgressDisplay from './ProgressDisplay'
+import TemperatureGrid from './TemperatureGrid'
+// import { IconInfoCircle } from '@tabler/icons-react'
+import { usePrinterWebSocket } from '@/hooks/usePrinterWebSocket'
+import ProgressDisplay from './ProgressDisplay'
+import TemperatureChart from '../TemperatureChart/TemperatureChart'
 
 const PrinterStatus: FC = () => {
-  const { printerState, jobState } = useApi()
-  const { t } = useTranslation('features', { keyPrefix: 'PrinterStatus' })
+  // const {
+  //   printerState,
+  //   jobState,
+  // hasPrinterError,
+  // hasJobError,
+  // stopPrinterInterval,
+  // stopJobInterval,
+  // retryPrinter,
+  // retryJob,
+  // printerLoading,
+  // jobLoading,
+  // } = usePrinterContext()
 
-  const theme = useMantineTheme()
+  const {
+    printerStateData,
+    printerStatusMsg,
+    error: errorWs,
+    loading: loadingWs,
+    retryConnection: retryConnectionWs,
+  } = usePrinterWebSocket()
+
+  const { t } = useTranslation('printerStatus')
 
   const isSmallScreen = useMediaQuery('(max-width: 768px)')
 
-  if (!printerState || !jobState) {
+  const handleRetry = () => {
+    // retryPrinter()
+    // retryJob()
+    console.log('retry')
+  }
+
+  // useEffect(() => {
+  //   if (hasPrinterError) {
+  //     stopPrinterInterval()
+  //   }
+  //   if (hasJobError) {
+  //     stopJobInterval()
+  //   }
+  // }, [hasPrinterError, hasJobError, stopPrinterInterval, stopJobInterval])
+
+  // const icon = <IconInfoCircle />
+
+  // if (hasPrinterError || hasJobError) {
+  //   return (
+  //     <Alert variant="light" color="red" title={t('errorOcurred')} icon={icon}>
+  //       <Button
+  //         onClick={handleRetry}
+  //         disabled={printerLoading || jobLoading}
+  //         loading={printerLoading || jobLoading}
+  //       >
+  //         {t('retry')}
+  //       </Button>
+  //     </Alert>
+  //   )
+  // }
+
+  // if (!printerState || !jobState) {
+  //   return <div>{t('loading')}</div>
+  // }
+
+  if (loadingWs) {
     return <div>{t('loading')}</div>
   }
 
   const temperatures = [
     {
       title: t('bedTemperature'),
-      temperature: printerState?.temperature?.bed?.actual,
+      temperature: printerStateData?.temps?.bed?.actual,
       minTemp: 20,
       maxTemp: 60,
     },
     {
       title: t('hotendTemperature'),
-      temperature: printerState?.temperature?.tool0?.actual,
+      temperature: printerStateData?.temps?.tool0?.actual,
       minTemp: 22,
       maxTemp: 200,
     },
@@ -47,22 +104,17 @@ const PrinterStatus: FC = () => {
             textAlign: isSmallScreen ? 'center' : 'left',
           }}
         >
-          {t('printerStatus')}
-          <JobStatus jobState={jobState} />
+          {t('title')}
+
+          <JobStatus state={printerStatusMsg ?? '-'} />
         </h1>
       </Box>
+
       <TemperatureGrid temperatures={temperatures} />
       <Space h="xl" />
-      <ProgressDisplay
-        printTime={jobState?.progress?.printTime ?? 0}
-        printTimeLeft={jobState?.progress?.printTimeLeft ?? 0}
-        filePos={jobState?.progress?.filepos ?? 0}
-        fileSize={jobState?.job?.file?.size ?? 0}
-        fileName={jobState?.job?.file?.name ?? ''}
-        isPrinting={jobState?.state === 'Printing'}
-      />
+      <ProgressDisplay />
       <Space h="xl" />
-      <TemperatureChart printerState={printerState} />
+      <TemperatureChart temperatures={temperatures} />
     </div>
   )
 }

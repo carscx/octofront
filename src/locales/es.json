@@ -3,6 +3,48 @@
     "statePrinter": "Impresora de Estado",
     "light": "Claro",
     "dark": "Oscuro",
-    "auto": "Auto"
+    "auto": "Auto",
+    "toolExtruder": "Extrusor",
+    "extrude": "Extruir",
+    "retract": "Retraer"
+  },
+  "printerStatus": {
+    "loading": "Cargando...",
+    "errorOcurred": "Ocurrió un error",
+    "title": "Estado de la impresora",
+    "statePrinter": "Estado de la impresora",
+    "bedTemperature": "Temperatura de la cama",
+    "hotendTemperature": "Temperatura del hotend",
+    "readyToPrint": "Todo listo para imprimir",
+    "printing": "Imprimiendo",
+    "paused": "Pausado",
+    "error": "Error",
+    "offline": "Desconectado",
+    "unknown": "Desconocido",
+    "printTime": "Tiempo de impresión",
+    "printTimeLeft": "Tiempo restante de impresión",
+    "estimatedCompletionTime": "Hora estimada de finalización",
+    "printed": "Impreso",
+    "file": "Archivo",
+    "printProgress": "Progreso de impresión",
+    "zeroBytes": "0 Bytes",
+    "bytes": "Bytes",
+    "kb": "KB",
+    "mb": "MB",
+    "gb": "GB",
+    "tb": "TB",
+    "retry": "Reintentar",
+    "chart": {
+      "title": "Gráfico de temperatura",
+      "bed": "Cama",
+      "hotend": "Hotend"
+    }
+  },
+  "tool": {
+    "title": "Extrusor",
+    "temperatureIsInRange": "La temperatura está en rango",
+    "temperatureIsOutOfRange": "La temperatura está fuera de rango",
+    "extrusionPresetValues": "Valores preestablecidos de extrusión",
+    "retractionPresetValues": "Valores preestablecidos de retracción"
   }
 }

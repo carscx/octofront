@@ -1,9 +1,8 @@
-// context/AuthContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react'
+import { createContext, useState, useContext, ReactNode } from 'react'
 
 interface AuthContextType {
   isAuthenticated: boolean
-  login: (token: string) => void
+  login: (token: string, username: string) => void
   logout: () => void
 }
 
@@ -12,13 +11,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('token'))
 
-  const login = (token: string) => {
+  const login = (token: string, username: string) => {
     localStorage.setItem('token', token)
+    localStorage.setItem('username', username)
     setIsAuthenticated(true)
   }
 
   const logout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('username')
     setIsAuthenticated(false)
   }
 

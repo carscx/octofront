@@ -1,13 +1,8 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import enJSON from '../locales/en.json'
-import esJSON from '../locales/es.json'
 import LanguageDetector from 'i18next-browser-languagedetector'
-
-import esPrinterStatusJSON from '@/components/PrinterStatus/es.json'
-import enPrinterStatusJSON from '@/components/PrinterStatus/en.json'
-
-// Features
+import enJSON from '@/locales/en.json'
+import esJSON from '@/locales/es.json'
 
 void i18n
   .use(LanguageDetector)
@@ -25,19 +20,5 @@ void i18n
       escapeValue: false,
     },
   })
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-i18n.services.formatter.add('lowercase', (value: string) => {
-  return value.toLowerCase()
-})
-
-i18n.addResourceBundle('en', 'features', {
-  PrinterStatus: enPrinterStatusJSON,
-})
-
-i18n.addResourceBundle('es', 'features', {
-  PrinterStatus: esPrinterStatusJSON,
-})
 
 export default i18n
