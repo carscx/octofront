@@ -1,6 +1,7 @@
-import { type FC, useState, useEffect } from 'react'
+import { type FC } from 'react'
 import { Grid, Alert, Space, Center, Chip } from '@mantine/core'
 import { IconTemperature } from '@tabler/icons-react'
+import { useValidTemperature } from '@/hooks/useValidTemperature'
 
 interface TemperatureGridProps {
   temperatures: Array<{
@@ -12,20 +13,7 @@ interface TemperatureGridProps {
 }
 
 const TemperatureGrid: FC<TemperatureGridProps> = ({ temperatures }) => {
-  const [previousTemperatures, setPreviousTemperatures] = useState<Array<number | undefined>>(
-    temperatures.map((t) => t.temperature)
-  )
-
-  useEffect(() => {
-    const updatedTemperatures = temperatures.map((t, index) => {
-      if (t.temperature === 0 && previousTemperatures[index] !== undefined) {
-        return previousTemperatures[index] // Mantener la temperatura anterior si la actual es 0
-      }
-      return t.temperature
-    })
-
-    setPreviousTemperatures(updatedTemperatures)
-  }, [temperatures])
+  const validTemperatures = useValidTemperature(temperatures.map((t) => t.temperature))
 
   const getChipColor = (temperature: number | undefined, minTemp: number, maxTemp: number) => {
     if (temperature === undefined) return 'gray'
@@ -41,7 +29,7 @@ const TemperatureGrid: FC<TemperatureGridProps> = ({ temperatures }) => {
   return (
     <Grid gutter="md">
       {temperatures.map(({ title, temperature, minTemp, maxTemp }, index) => {
-        const effectiveTemperature = previousTemperatures[index]
+        const effectiveTemperature = validTemperatures[index]
         const chipColor = getChipColor(effectiveTemperature, minTemp, maxTemp)
 
         return (

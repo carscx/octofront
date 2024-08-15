@@ -8,6 +8,15 @@
     "extrude": "Extruir",
     "retract": "Retraer"
   },
+  "login": {
+    "title": "Iniciar sesión",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "rememberMe": "Recuérdame",
+    "error": "Nombre de usuario o contraseña inválidos"
+  },
   "printerStatus": {
     "loading": "Cargando...",
     "errorOcurred": "Ocurrió un error",

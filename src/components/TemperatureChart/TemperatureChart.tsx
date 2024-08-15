@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { useTranslation } from 'react-i18next'
+import { useValidTemperature } from '@/hooks/useValidTemperature'
 
 interface TemperatureData {
   time: string
@@ -11,29 +12,27 @@ interface TemperatureData {
 const TemperatureChart: FC<{ temperatures: any }> = ({ temperatures }) => {
   const { t } = useTranslation('printerStatus')
   const [data, setData] = useState<TemperatureData[]>([])
-  const [lastValidBedTemp, setLastValidBedTemp] = useState<number | null>(null)
-  const [lastValidHotendTemp, setLastValidHotendTemp] = useState<number | null>(null)
+
+  const validTemperatures = useValidTemperature([
+    temperatures[0]?.temperature,
+    temperatures[1]?.temperature,
+  ])
+  // const [lastValidBedTemp, setLastValidBedTemp] = useState<number | null>(null)
+  // const [lastValidHotendTemp, setLastValidHotendTemp] = useState<number | null>(null)
 
   useEffect(() => {
     if (temperatures) {
-      const currentBedTemp = temperatures[0].temperature
-      const currentHotendTemp = temperatures[1].temperature
-
-      const newBedTemp = currentBedTemp !== 0 ? currentBedTemp : lastValidBedTemp
-      const newHotendTemp = currentHotendTemp !== 0 ? currentHotendTemp : lastValidHotendTemp
-
-      if (currentBedTemp !== 0) setLastValidBedTemp(currentBedTemp)
-      if (currentHotendTemp !== 0) setLastValidHotendTemp(currentHotendTemp)
+      const [bedTemp, hotendTemp] = validTemperatures
 
       const newDataPoint: TemperatureData = {
         time: new Date().toLocaleTimeString(),
-        bedTemp: newBedTemp ?? 0,
-        hotendTemp: newHotendTemp ?? 0,
+        bedTemp: bedTemp ?? 0,
+        hotendTemp: hotendTemp ?? 0,
       }
 
       setData((prevData) => [...prevData, newDataPoint].slice(-50))
     }
-  }, [temperatures])
+  }, [validTemperatures])
 
   const option = {
     backgroundColor: '#333',

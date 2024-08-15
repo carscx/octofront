@@ -24,7 +24,7 @@ export default function App() {
   }, [i18n])
 
   return (
-    <MantineProvider theme={theme} defaultColorScheme="light">
+    <MantineProvider theme={theme} classNamesPrefix="octoFront" defaultColorScheme="auto">
       <I18nextProvider i18n={i18n} defaultNS={'translation'}>
         <NavigationProgress />
         <Notifications />

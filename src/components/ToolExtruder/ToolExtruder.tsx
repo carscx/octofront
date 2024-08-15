@@ -13,7 +13,8 @@ import {
 import { useTranslation } from 'react-i18next'
 import { IconMinus, IconPlus } from '@tabler/icons-react'
 import { useTool } from '@/hooks/useTool'
-import { usePrinterContext } from '@/context/PrinterContext'
+// import { usePrinterContext } from '@/context/PrinterContext'
+import { useValidTemperature } from '@/hooks/useValidTemperature'
 import { usePrinterWebSocket } from '@/hooks/usePrinterWebSocket'
 
 interface ToolStatus {
@@ -30,16 +31,18 @@ const ToolExtruder: FC = () => {
   const { dataTool, getToolStatus, moveFilament } = useTool()
   const { tool0 } = dataTool || {}
   const { printerStateData } = usePrinterWebSocket()
-  // const { printerState } = usePrinterContext()
   const handlersRef = useRef<NumberInputHandlers>(null)
   const [filamentAmount, setFilamentAmount] = useState<number>(5)
 
-  const tempTarget = printerStateData?.temps?.tool0?.target || 0
-  const tempActual = printerStateData?.temps?.tool0?.actual || 0
+  const validTemperatures = useValidTemperature([
+    printerStateData?.temps?.tool0?.actual || 0,
+    printerStateData?.temps?.tool0?.target || 0,
+  ])
 
   const isTemperatureInRange = (toolStatus: ToolStatus | undefined, tolerance = 5): boolean => {
-    if (!toolStatus) return false
-    return Math.abs(tempActual - tempTarget) <= tolerance
+    const [tempActual, tempTarget] = validTemperatures
+    if (!toolStatus || tempActual === null || tempTarget === null) return false
+    return Math.abs((tempActual || 0) - (tempTarget || 0)) <= tolerance
   }
 
   const isEnableExtrude = !isTemperatureInRange(tool0)
@@ -94,28 +97,31 @@ const ToolExtruder: FC = () => {
   return (
     <Box mt="lg">
       <Title>{t('title')}</Title>
-      <NumberInput
-        handlersRef={handlersRef}
-        step={5}
-        min={0}
-        max={1000}
-        value={filamentAmount}
-        stepHoldDelay={500}
-        stepHoldInterval={100}
-        hideControls
-        readOnly
-        leftSection={
-          <ActionIcon onClick={handleDecrement} variant="default" size="lg" aria-label="Minus">
-            <IconMinus style={{ width: rem(20) }} stroke={1.5} />
-          </ActionIcon>
-        }
-        rightSection={
-          <ActionIcon onClick={handleIncrement} variant="default" size="lg" aria-label="Plus">
-            <IconPlus style={{ width: rem(20) }} stroke={1.5} />
-          </ActionIcon>
-        }
-      />
-
+      <Box style={{ display: 'flex', alignItems: 'center' }}>
+        <ActionIcon
+          onClick={handleDecrement}
+          variant="default"
+          size="lg"
+          aria-label="Minus"
+          ml="sm"
+        >
+          <IconMinus style={{ width: rem(20) }} stroke={1.5} />
+        </ActionIcon>
+        <NumberInput
+          handlersRef={handlersRef}
+          step={5}
+          min={0}
+          max={1000}
+          value={filamentAmount}
+          stepHoldDelay={500}
+          stepHoldInterval={100}
+          hideControls
+          style={{ width: '100%' }}
+        />
+        <ActionIcon onClick={handleIncrement} variant="default" size="lg" aria-label="Plus">
+          <IconPlus style={{ width: rem(20) }} stroke={1.5} />
+        </ActionIcon>
+      </Box>
       <Group mt="lg">
         <Tooltip label={labelExtrude}>
           <Button

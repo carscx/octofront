@@ -3,8 +3,8 @@ import { SegmentedControl, useMantineColorScheme } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 
 export function ColorSchemeToggle() {
-  const { setColorScheme } = useMantineColorScheme()
-  const [value, setValue] = useState('dark')
+  const { setColorScheme, colorScheme } = useMantineColorScheme()
+  const [value, setValue] = useState(colorScheme)
   const { t } = useTranslation('common')
 
   const handleChangeTheme = (value: string | any) => {
