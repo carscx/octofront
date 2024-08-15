@@ -12,10 +12,11 @@ export const usePrinterWebSocket = () => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const wsRef = useRef<WebSocket | null>(null)
+  const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const connectWebSocket = () => {
     const session = localStorage.getItem('token')
-    const username = 'ender'
+    const username = localStorage.getItem('username')
 
     if (!session || !username) {
       setError('No se encontró sesión o nombre de usuario en localStorage')
@@ -26,9 +27,22 @@ export const usePrinterWebSocket = () => {
     const ws = new WebSocket(`${config.websocket.url}/sockjs/websocket`)
     wsRef.current = ws
 
+    // Configurar un temporizador para cerrar la conexión si no se abre en 5 segundos
+    connectionTimeoutRef.current = setTimeout(() => {
+      if (wsRef.current && wsRef.current.readyState !== WebSocket.OPEN) {
+        wsRef.current.close()
+        setError('No se pudo establecer conexión con el WebSocket dentro del tiempo esperado.')
+        setLoading(false)
+      }
+    }, 5000)
+
     ws.onopen = () => {
       setLoading(false)
       setError(null)
+
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current)
+      }
 
       ws.send(
         JSON.stringify({
@@ -71,7 +85,8 @@ export const usePrinterWebSocket = () => {
     }
 
     ws.onerror = (err) => {
-      setError('Error en la conexión del WebSocket')
+      console.log('err', err)
+      setError(err.type)
       setLoading(false)
     }
 
@@ -88,6 +103,9 @@ export const usePrinterWebSocket = () => {
     return () => {
       if (wsRef.current) {
         wsRef.current.close()
+      }
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current)
       }
     }
   }, [])

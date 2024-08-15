@@ -1,8 +1,9 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import enJSON from '@/locales/en.json'
-import esJSON from '@/locales/es.json'
+import enJSON from '@/i18n/en.json'
+import esJSON from '@/i18n/es.json'
+import frJSON from '@/i18n/fr.json'
 
 void i18n
   .use(LanguageDetector)
@@ -11,6 +12,7 @@ void i18n
     resources: {
       en: enJSON,
       es: esJSON,
+      fr: frJSON,
     },
     lng: 'es',
     fallbackLng: 'es',

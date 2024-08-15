@@ -1,0 +1,22 @@
+{
+  "langs": [
+    {
+      "code": "es",
+      "codeCountry": "es-ES",
+      "name": "Español",
+      "flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg"
+    },
+    {
+      "code": "en",
+      "codeCountry": "en-US",
+      "name": "English",
+      "flag": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg"
+    },
+    {
+      "code": "fr",
+      "codeCountry": "fr-FR",
+      "name": "Français",
+      "flag": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg"
+    }
+  ]
+}

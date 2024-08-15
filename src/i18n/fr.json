@@ -1,0 +1,56 @@
+{
+  "common": {
+    "statePrinter": "État de l'imprimante",
+    "light": "Clair",
+    "dark": "Sombre",
+    "auto": "Auto",
+    "toolExtruder": "Extrudeuse",
+    "extrude": "Extruder",
+    "retract": "Rétracter"
+  },
+  "printerStatus": {
+    "loading": "Chargement...",
+    "errorOcurred": "Une erreur est survenue",
+    "title": "État de l'imprimante",
+    "statePrinter": "État de l'imprimante",
+    "bedTemperature": "Température du lit",
+    "hotendTemperature": "Température de la buse",
+    "readyToPrint": "Prêt à imprimer",
+    "printing": "Impression",
+    "paused": "En pause",
+    "error": "Erreur",
+    "offline": "Hors ligne",
+    "unknown": "Inconnu",
+    "printTime": "Temps d'impression",
+    "printTimeLeft": "Temps restant d'impression",
+    "estimatedCompletionTime": "Heure estimée de fin",
+    "printed": "Imprimé",
+    "file": "Fichier",
+    "printProgress": "Progression de l'impression",
+    "zeroBytes": "0 octets",
+    "bytes": "Octets",
+    "kb": "Ko",
+    "mb": "Mo",
+    "gb": "Go",
+    "tb": "To",
+    "retry": "Réessayer",
+    "chart": {
+      "title": "Graphique de température",
+      "bed": "Lit",
+      "hotend": "Buse"
+    }
+  },
+  "tool": {
+    "title": "Extrudeuse",
+    "temperatureIsInRange": "La température est dans la plage",
+    "temperatureIsOutOfRange": "La température est hors de la plage",
+    "extrusionPresetValues": "Valeurs préréglées d'extrusion",
+    "retractionPresetValues": "Valeurs préréglées de rétraction"
+  },
+  "webcamStream": {
+    "title": "Flux de la webcam",
+    "loading": "Chargement du flux de la webcam...",
+    "error": "Une erreur est survenue lors du chargement du flux de la webcam",
+    "retry": "Réessayer"
+  }
+}

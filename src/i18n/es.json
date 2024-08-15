@@ -46,5 +46,11 @@
     "temperatureIsOutOfRange": "La temperatura está fuera de rango",
     "extrusionPresetValues": "Valores preestablecidos de extrusión",
     "retractionPresetValues": "Valores preestablecidos de retracción"
+  },
+  "webcamStream": {
+    "title": "Transmisión de la cámara web",
+    "loading": "Cargando transmisión de la cámara web...",
+    "error": "Ocurrió un error al cargar la transmisión de la cámara web",
+    "retry": "Reintentar"
   }
 }

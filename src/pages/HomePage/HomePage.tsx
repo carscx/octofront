@@ -1,24 +1,32 @@
 import { useState, type FC } from 'react'
-import { AppShell, Container, Grid, Stack, ActionIcon } from '@mantine/core'
-import PrinterStatus from '@/components/PrinterStatus/PrinterStatus'
-import WebcamStream from '@/components/WebcamStream/WebcamStream'
-import TemperatureControl from '@/components/TemperatureControl/TemperatureControl'
-import LanguageSelector from '@/components/LanguageSelector/LanguageSelector'
-import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle'
-import Logo from '@/components/Logo'
+import { AppShell, Container, Grid, Stack, ActionIcon, Box } from '@mantine/core'
+import { useNavigate } from 'react-router-dom'
 import {
   IconLayoutSidebarLeftExpandFilled,
   IconLayoutSidebarRightExpandFilled,
+  IconLogout,
 } from '@tabler/icons-react'
 import useIsMobile from '@/hooks/useIsMobile'
-import ToolExtruder from '@/components/ToolExtruder'
+import PrinterStatus from '@/components/PrinterStatus/PrinterStatus'
+import WebcamStream from '@/components/WebcamStream/WebcamStream'
+// import TemperatureControl from '@/components/TemperatureControl/TemperatureControl'
+import LanguageSelector from '@/components/LanguageSelector/LanguageSelector'
+import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle'
+import Logo from '@/components/Logo'
+// import ToolExtruder from '@/components/ToolExtruder'
 
 const HomePage: FC = () => {
-  const [opened, setOpened] = useState<boolean>(false)
+  const [opened, setOpened] = useState<boolean>(true)
   const isMobile = useIsMobile()
+  const navigate = useNavigate()
 
   const handleOpenSideBar = () => {
     setOpened(!opened)
+  }
+
+  const goToLogout = () => {
+    console.log('Logout')
+    navigate('/logout')
   }
 
   return (
@@ -61,6 +69,17 @@ const HomePage: FC = () => {
         <Stack gap="md">
           <LanguageSelector />
           <ColorSchemeToggle />
+        </Stack>
+        <Stack style={{ marginTop: 'auto' }}>
+          <Box
+            style={{ display: 'flex', gap: 20, alignItems: 'center', cursor: 'pointer' }}
+            onClick={goToLogout}
+          >
+            <ActionIcon size={42} variant="filled" aria-label="Logout">
+              <IconLogout />
+            </ActionIcon>
+            <p>Logout</p>
+          </Box>
         </Stack>
       </AppShell.Navbar>
       <AppShell.Main>
