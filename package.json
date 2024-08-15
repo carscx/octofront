@@ -15,7 +15,10 @@
     "lint:eslint": "eslint . --ext .ts,.tsx --cache",
     "lint:stylelint": "stylelint '**/*.css' --cache",
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
+    "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
+    "release:patch": "npm version patch -m \"chore(release): v%s\" && git push && git push --tags",
+    "release:minor": "npm version minor -m \"chore(release): v%s\" && git push && git push --tags",
+    "release:major": "npm version major -m \"chore(release): v%s\" && git push && git push --tags"
   },
   "dependencies": {
     "@mantine/charts": "^7.12.0",
