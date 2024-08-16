@@ -47,7 +47,11 @@
       "title": "Temperature chart",
       "bed": "Bed",
       "hotend": "Hotend"
-    }
+    },
+    "notificationTempSetTitleOk": "Extruder temperature set successfully",
+    "notificationTempSetMessageOk": "The extruder temperature has been set to {{toolTemp}}°C",
+    "notificationTempSetTitleError": "Error setting extruder temperature",
+    "notificationTempSetMessageError": "An error occurred while setting the extruder temperature"
   },
   "tool": {
     "title": "Extruder",

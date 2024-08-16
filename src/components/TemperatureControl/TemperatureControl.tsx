@@ -1,5 +1,6 @@
-import { type FC, useState } from 'react'
+import { type FC, useCallback, useState } from 'react'
 import { Button } from '@mantine/core'
+import { useTranslation } from 'react-i18next'
 import { usePrinterContext } from '@/context/PrinterContext'
 import { notifications } from '@mantine/notifications'
 import classes from './TemperatureControl.module.scss'
@@ -7,6 +8,7 @@ import classes from './TemperatureControl.module.scss'
 const TemperatureControl: FC = () => {
   const [toolTemp, setToolTemp] = useState<number>(0)
   const [bedTemp, setBedTemp] = useState<number>(0)
+  const { t } = useTranslation('printerStatus')
 
   const { setToolTemperature, setBedTemperature } = usePrinterContext()
 
@@ -18,44 +20,45 @@ const TemperatureControl: FC = () => {
     setBedTemp(Number(e.target.value))
   }
 
+  const notificationOk = useCallback(
+    (temp: number) => {
+      notifications.show({
+        title: t('notificationTempSetTitleOk'),
+        message: t('notificationTempSetMessageOk', {
+          toolTemp: temp,
+        }),
+        classNames: classes,
+        position: 'top-right',
+      })
+    },
+    [toolTemp]
+  )
+
+  const notificationError = useCallback(() => {
+    notifications.show({
+      title: t('notificationTempSetTitleError'),
+      color: 'red',
+      message: t('notificationTempSetMessageError'),
+      classNames: classes,
+      position: 'top-right',
+    })
+  }, [])
+
   const handleSetToolTemp = async () => {
     try {
       await setToolTemperature(toolTemp)
-      notifications.show({
-        title: 'Temperatura del extrusor establecida correctamente',
-        message: `La temperatura del extrusor se ha establecido en ${toolTemp}°C`,
-        classNames: classes,
-        position: 'top-right',
-      })
+      notificationOk(toolTemp)
     } catch (error) {
-      notifications.show({
-        title: 'Error al establecer la temperatura del extrusor',
-        color: 'red',
-        message: 'Ha ocurrido un error al establecer la temperatura del extrusor',
-        classNames: classes,
-        position: 'top-right',
-      })
+      notificationError()
     }
   }
 
   const handleSetBedTemp = async () => {
     try {
       await setBedTemperature(bedTemp)
-      notifications.show({
-        title: 'Temperatura de la cama establecida correctamente',
-        message: `La temperatura de la cama se ha establecido en ${bedTemp}°C`,
-        classNames: classes,
-        position: 'top-right',
-      })
+      notificationOk(bedTemp)
     } catch (error) {
-      alert('Error al establecer la temperatura de la cama')
-      notifications.show({
-        title: 'Error al establecer la temperatura de la cama',
-        color: 'red',
-        message: 'Ha ocurrido un error al establecer la temperatura de la cama',
-        classNames: classes,
-        position: 'top-right',
-      })
+      notificationError()
     }
   }
 

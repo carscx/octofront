@@ -63,7 +63,7 @@ const DraggableItem: FC<DraggableItemProps> = ({ id, index, moveComponent, child
       }}
     >
       <IconGripVertical size={24} style={{ marginRight: '8px', color: '#888' }} />
-      <div style={{ flex: 1 }}>{children}</div>
+      <div style={{ flex: 1, width: '100%' }}>{children}</div>
     </Box>
   )
 }
