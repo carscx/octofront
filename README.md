@@ -1,5 +1,8 @@
 # OctoFront
 
+![image](https://github.com/user-attachments/assets/dcd1b362-6e2c-4a6d-8f94-c0dbb858a40a)
+
+
 ---
 
 <p>
@@ -171,3 +174,11 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más 
 ## Contacto
 
 Si tienes alguna pregunta o necesitas más información, puedes contactar con el mantenedor del proyecto a través de [karscx@gmail.com](mailto:karscx@gmail.com 'karscx@gmail.com').
+
+## Screenshots
+
+<img width="316" alt="ExtruderControl" src="https://github.com/user-attachments/assets/fcc655e8-a2ef-4ac6-893c-820d8c210366">
+<img width="252" alt="Multilanguage-theme" src="https://github.com/user-attachments/assets/08e537e2-4fbd-469c-9ce3-57a05eacc1d8">
+<img width="320" alt="LoginPage" src="https://github.com/user-attachments/assets/00ad1c45-9c6d-4049-9f8d-1f05b75ed96b">
+<img width="1070" alt="Home-PrinterStatus" src="https://github.com/user-attachments/assets/8c3c50c8-2fb0-43be-8292-265eca5ca0ae">
+
